@@ -4,604 +4,420 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aktiviteter | Grünerløkka Arbeiderpartilag</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='roseGrad' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:%23ff6b7a;stop-opacity:1' /><stop offset='100%' style='stop-color:%23c41e3a;stop-opacity:1' /></linearGradient></defs><path d='M50 5 C60 15 65 25 65 35 C65 50 55 60 50 70 C45 60 35 50 35 35 C35 25 40 15 50 5 Z' fill='url(%23roseGrad)'/><circle cx='50' cy='35' r='12' fill='%23ff8a95' opacity='0.7'/><circle cx='50' cy='40' r='8' fill='%23ffc0cb' opacity='0.5'/></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --krem: #FDFAF4;
+            --rod: #E31C28;
+            --burgunder: #560522;
+            --sort: #000000;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f8f8f8;
-            color: #222;
+            font-family: 'Inter', sans-serif;
+            background: var(--krem);
+            color: var(--burgunder);
             line-height: 1.6;
         }
 
-        /* Hero Banner */
+        /* HERO */
         .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(228, 25, 28, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
+            background: var(--krem);
+            padding: 4rem 2rem 3rem;
+            border-bottom: 3px solid var(--rod);
         }
 
         .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 3rem;
+            gap: 2.5rem;
             flex-wrap: wrap;
         }
 
         .logo-container {
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             flex-shrink: 0;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
         .logo-container img {
             width: 100%;
             height: 100%;
+            object-fit: contain;
         }
 
         .hero-text h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            text-transform: uppercase;
+            color: var(--rod);
+            letter-spacing: 0.02em;
+            line-height: 1;
+            margin-bottom: 0.4rem;
         }
 
-        .hero-text p {
-            font-size: 1.1rem;
-            opacity: 0.95;
-            font-weight: 300;
+        .hero-text .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.05rem;
+            color: var(--burgunder);
+            font-weight: 400;
         }
 
-        .hero-text .tagline {
-            font-size: 0.95rem;
-            margin-top: 0.5rem;
-            opacity: 0.9;
-        }
-
+        /* CONTAINER */
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 3rem 2rem;
         }
 
-        /* Info Cards */
-        .info-section {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
+        /* INFO-STRIPE */
+        .info-stripe {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            padding: 1.5rem 0 2.5rem;
+            border-bottom: 1px solid rgba(86,5,34,0.15);
             margin-bottom: 3rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-
-        .info-card {
-            text-align: center;
-        }
-
-        .info-card .icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .info-card h3 {
-            color: #E4191C;
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
             font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
+            color: var(--burgunder);
+        }
+
+        .info-item strong {
             font-weight: 600;
         }
 
-        .info-card p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        /* Next Event Banner */
+        /* NESTE ARRANGEMENT */
         .next-event-banner {
-            background: linear-gradient(135deg, #E4191C 0%, #B81419 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 8px;
+            background: var(--rod);
+            color: var(--krem);
+            padding: 2.5rem;
             margin-bottom: 3rem;
-            box-shadow: 0 4px 12px rgba(228, 25, 28, 0.2);
         }
 
-        .next-event-banner h3 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.8rem;
-            opacity: 0.95;
+        .next-event-banner .label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            opacity: 0.85;
+            display: block;
+            margin-bottom: 0.5rem;
         }
 
         .next-event-banner .event-name {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 1.5rem;
         }
 
-        .next-event-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .next-event-detail-item {
+        .next-event-meta {
             display: flex;
-            align-items: center;
-            gap: 0.8rem;
+            gap: 2.5rem;
+            flex-wrap: wrap;
         }
 
-        .next-event-detail-item .icon {
-            font-size: 1.8rem;
-        }
-
-        .next-event-detail-item div {
+        .next-event-meta-item {
             font-size: 0.95rem;
         }
 
-        .next-event-detail-item .label {
-            opacity: 0.85;
+        .next-event-meta-item .meta-label {
             display: block;
-            font-size: 0.85rem;
-        }
-
-        /* Timeline Section */
-        .timeline-section h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: #222;
-            font-weight: 700;
-        }
-
-        .timeline-section .subtitle {
-            color: #666;
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-
-        .weeks-container {
-            margin-bottom: 3rem;
-        }
-
-        .weeks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .week-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            border-top: 4px solid #E4191C;
-        }
-
-        .week-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
-
-        .week-card.past {
-            opacity: 0.4;
-        }
-
-        .week-card-header {
-            background: #f5f5f5;
-            padding: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .week-number {
-            font-size: 0.85rem;
-            color: #E4191C;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.3rem;
+            letter-spacing: 0.1em;
+            opacity: 0.75;
+            margin-bottom: 0.15rem;
         }
 
-        .activity-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #222;
+        /* AKTIVITETSPLAN */
+        .section-heading {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            text-transform: uppercase;
+            color: var(--rod);
+            letter-spacing: 0.02em;
+            margin-bottom: 0.4rem;
         }
 
-        .week-card-body {
-            padding: 1.5rem;
-        }
-
-        .activity-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .detail {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            margin-bottom: 1rem;
+        .section-sub {
             font-size: 0.95rem;
-        }
-
-        .detail-icon {
-            color: #E4191C;
-            font-weight: bold;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .detail-label {
-            color: #E4191C;
-            font-weight: 600;
-        }
-
-        .detail-text {
-            color: #555;
-        }
-
-        /* Description Section */
-        .description-section {
-            background: white;
-            border-radius: 8px;
-            padding: 2rem;
+            color: var(--burgunder);
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            opacity: 0.75;
         }
 
-        .description-section h3 {
-            font-size: 1.5rem;
-            color: #222;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-
-        .description-grid {
+        .events-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1px;
+            background: rgba(86,5,34,0.12);
+            border: 1px solid rgba(86,5,34,0.12);
+            margin-bottom: 4rem;
         }
 
-        .description-item {
-            padding-bottom: 1rem;
+        .event-card {
+            background: var(--krem);
+            padding: 1.5rem;
+            transition: background 0.15s;
         }
 
-        .description-item .icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.8rem;
+        .event-card:hover {
+            background: #f5ede0;
         }
 
-        .description-item h4 {
-            font-size: 1.1rem;
-            color: #222;
+        .event-card.past {
+            opacity: 0.35;
+        }
+
+        .event-card .card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--rod);
+            margin-bottom: 0.4rem;
+        }
+
+        .event-card .card-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            color: var(--burgunder);
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .event-card .card-detail {
+            font-size: 0.88rem;
+            color: var(--burgunder);
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+        }
+
+        /* OM AKTIVITETENE */
+        .about-section {
+            border-top: 3px solid var(--rod);
+            padding-top: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .about-item h4 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: var(--rod);
             margin-bottom: 0.5rem;
-            font-weight: 600;
         }
 
-        .description-item p {
-            color: #666;
+        .about-item p {
             font-size: 0.95rem;
-            line-height: 1.5;
+            color: var(--burgunder);
+            line-height: 1.6;
         }
 
-        .description-item a {
-            color: #E4191C;
-            text-decoration: none;
+        .about-item a {
+            color: var(--rod);
             font-weight: 600;
         }
 
-        .description-item a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer */
+        /* FOOTER */
         footer {
-            background: #222;
-            color: white;
-            padding: 2rem;
+            background: var(--burgunder);
+            color: var(--krem);
+            padding: 2.5rem 2rem;
             text-align: center;
-            margin-top: 3rem;
-            border-top: 4px solid #E4191C;
         }
 
         footer p {
-            margin: 0.5rem 0;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+            opacity: 0.9;
         }
 
-        footer .highlight {
-            color: #E4191C;
-            font-weight: 600;
+        footer .footer-name {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 1;
+            margin-bottom: 0.5rem;
         }
 
         footer a {
-            color: #E4191C;
+            color: var(--krem);
+            opacity: 0.7;
             text-decoration: none;
         }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+        footer a:hover { opacity: 1; }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-content {
-                flex-direction: column;
-                gap: 2rem;
-            }
-
-            .logo-container {
-                width: 100px;
-                height: 100px;
-                padding: 10px;
-            }
-
-            .hero-text h1 {
-                font-size: 1.8rem;
-            }
-
-            .weeks-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                padding: 3rem 1.5rem;
-            }
-
-            .container {
-                padding: 1.5rem;
-            }
-
-            .info-grid {
-                gap: 1.5rem;
-            }
-
-            .next-event-details {
-                grid-template-columns: 1fr;
-            }
-
-            .next-event-banner .event-name {
-                font-size: 1.8rem;
-            }
+        /* RESPONSIV */
+        @media (max-width: 640px) {
+            .hero-content { gap: 1.5rem; }
+            .logo-container { width: 80px; height: 80px; }
+            .next-event-banner { padding: 1.5rem; }
+            .container { padding: 2rem 1.25rem; }
+            .info-stripe { gap: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Hero Banner -->
+
     <div class="hero">
         <div class="hero-content">
             <div class="logo-container">
                 <img src="logo.png" alt="Arbeiderpartiet logo">
             </div>
             <div class="hero-text">
-                <h1>Aktiviteter</h1>
-                <p>Grünerløkka Arbeiderpartilag</p>
-                <p class="tagline">Mai – november 2026</p>
+                <h1>Grünerløkka<br>Arbeiderpartilag</h1>
+                <p class="subtitle">Aktiviteter våren og høsten 2026</p>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- Info Section -->
-        <div class="info-section">
-            <div class="info-grid">
-                <div class="info-card">
-                    <div class="icon">📍</div>
-                    <h3>Sted</h3>
-                    <p>Shamrock Pub, Grünerløkka</p>
-                </div>
-                <div class="info-card">
-                    <div class="icon">🕕</div>
-                    <h3>Tidspunkt</h3>
-                    <p>Annenhver onsdag kl. 18:00</p>
-                </div>
-            </div>
+
+        <div class="info-stripe">
+            <div class="info-item">📍 <span><strong>Shamrock Pub</strong>, Grünerløkka</span></div>
+            <div class="info-item">🕕 <span>Annenhver onsdag, <strong>kl. 18:00</strong></span></div>
+            <div class="info-item">📅 <span>Mai – november 2026</span></div>
         </div>
 
-        <!-- Next Event Banner -->
-        <div id="nextEventBanner" class="next-event-banner" style="display: none;">
-            <h3>🎯 Neste arrangement</h3>
+        <!-- Neste arrangement -->
+        <div id="nextEventBanner" class="next-event-banner" style="display:none">
+            <span class="label">Neste arrangement</span>
             <div class="event-name" id="nextEventName"></div>
-            <div class="next-event-details">
-                <div class="next-event-detail-item">
-                    <div class="icon">📅</div>
-                    <div><span class="label">Dato</span><span id="nextEventDate"></span></div>
+            <div class="next-event-meta">
+                <div class="next-event-meta-item">
+                    <span class="meta-label">Dato</span>
+                    <span id="nextEventDate"></span>
                 </div>
-                <div class="next-event-detail-item">
-                    <div class="icon">🕕</div>
-                    <div><span class="label">Tid</span><span id="nextEventTime">18:00</span></div>
+                <div class="next-event-meta-item">
+                    <span class="meta-label">Tid</span>
+                    <span>18:00</span>
                 </div>
-                <div class="next-event-detail-item">
-                    <div class="icon">📍</div>
-                    <div><span class="label">Sted</span><span id="nextEventLocation">Shamrock Pub</span></div>
+                <div class="next-event-meta-item">
+                    <span class="meta-label">Sted</span>
+                    <span>Shamrock Pub</span>
                 </div>
             </div>
         </div>
 
-        <!-- Timeline Section -->
-        <div class="timeline-section">
-            <h2>Aktivitetsplan</h2>
-            <p class="subtitle">Tre ulike aktiviteter som roterer annenhver onsdag</p>
+        <!-- Aktivitetsplan -->
+        <h2 class="section-heading">Aktivitetsplan</h2>
+        <p class="section-sub">Tre aktiviteter som roterer annenhver onsdag</p>
+        <div class="events-grid" id="eventsGrid"></div>
 
-            <div class="weeks-container">
-                <div class="weeks-grid" id="eventsGrid"></div>
-            </div>
-        </div>
-
-        <!-- Description Section -->
-        <div class="description-section">
-            <h3>Om aktivitetene</h3>
-            <div class="description-grid">
-                <div class="description-item">
-                    <div class="icon">🍺</div>
+        <!-- Om aktivitetene -->
+        <div class="about-section">
+            <h2 class="section-heading">Om aktivitetene</h2>
+            <div class="about-grid">
+                <div class="about-item">
                     <h4>Politisk Pub</h4>
-                    <p>En avslappet og engasjert arena for debatt og diskusjon om aktuelle politiske saker. Perfekt for å dele meninger og høre hva andre i laget tenker. Se <a href="https://www.politisk-pub.no" target="_blank">politisk-pub.no</a> for mer info.</p>
+                    <p>En avslappet arena for debatt om aktuelle politiske saker. Perfekt for å dele meninger og høre hva andre i laget tenker. Se <a href="https://www.politisk-pub.no" target="_blank">politisk-pub.no</a> for mer info.</p>
                 </div>
-                <div class="description-item">
-                    <div class="icon">📚</div>
+                <div class="about-item">
                     <h4>Sosialdemokratisk Bokklubb</h4>
-                    <p>Vi samles for å diskutere fagbøker og politisk litteratur fra et sosialdemokratisk perspektiv. Perfekt for de som liker å fordype seg i ideer og tanker som former politikken vår.</p>
+                    <p>Vi samles for å diskutere fagbøker og politisk litteratur fra et sosialdemokratisk perspektiv. For deg som liker å fordype seg i ideer som former politikken vår.</p>
                 </div>
-                <div class="description-item">
-                    <div class="icon">👥</div>
+                <div class="about-item">
                     <h4>Sosialt Samvær</h4>
-                    <p>Uformelt treff for medlemmene av GAPL for å styrke fellesskapet og få kjent hverandre bedre i en koselig setting. En god mulighet til å henge ut med likesinnede.</p>
+                    <p>Uformelt treff for å styrke fellesskapet og bli kjent med hverandre i en koselig setting. Alle er velkomne!</p>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p><span class="highlight">Grünerløkka Arbeiderpartilag</span></p>
-        <p>Alle arrangementer er åpne for medlemmer av Arbeiderpartiet og interesserte</p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Annenhver onsdag kl. 18:00 på Shamrock Pub – vi sees der!</p>
-        <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.7;"><a href="https://www.arbeiderpartiet.no" target="_blank">arbeiderpartiet.no</a></p>
+        <p class="footer-name">Grünerløkka Arbeiderpartilag</p>
+        <p>Alle arrangementer er åpne for medlemmer og interesserte</p>
+        <p style="margin-top:1rem"><a href="https://www.arbeiderpartiet.no" target="_blank">arbeiderpartiet.no</a></p>
     </footer>
 
     <script>
-        // Event data
         const events = [
-            { date: "13. mai 2026", title: "Politisk Pub", icon: "🍺" },
-            { date: "27. mai 2026", title: "Sosialdemokratisk Bokklubb", icon: "📚" },
-            { date: "10. juni 2026", title: "Sosialt Samvær", icon: "👥" },
-            { date: "24. juni 2026", title: "Politisk Pub", icon: "🍺" },
-            { date: "8. juli 2026", title: "Sosialdemokratisk Bokklubb", icon: "📚" },
-            { date: "22. juli 2026", title: "Sosialt Samvær", icon: "👥" },
-            { date: "5. august 2026", title: "Politisk Pub", icon: "🍺" },
-            { date: "19. august 2026", title: "Sosialdemokratisk Bokklubb", icon: "📚" },
-            { date: "2. september 2026", title: "Sosialt Samvær", icon: "👥" },
-            { date: "16. september 2026", title: "Politisk Pub", icon: "🍺" },
-            { date: "30. september 2026", title: "Sosialdemokratisk Bokklubb", icon: "📚" },
-            { date: "14. oktober 2026", title: "Sosialt Samvær", icon: "👥" },
-            { date: "28. oktober 2026", title: "Politisk Pub", icon: "🍺" },
-            { date: "11. november 2026", title: "Sosialdemokratisk Bokklubb", icon: "📚" }
+            { date: "13. mai 2026",        title: "Politisk Pub" },
+            { date: "27. mai 2026",        title: "Sosialdemokratisk Bokklubb" },
+            { date: "10. juni 2026",       title: "Sosialt Samvær" },
+            { date: "24. juni 2026",       title: "Politisk Pub" },
+            { date: "8. juli 2026",        title: "Sosialdemokratisk Bokklubb" },
+            { date: "22. juli 2026",       title: "Sosialt Samvær" },
+            { date: "5. august 2026",      title: "Politisk Pub" },
+            { date: "19. august 2026",     title: "Sosialdemokratisk Bokklubb" },
+            { date: "2. september 2026",   title: "Sosialt Samvær" },
+            { date: "16. september 2026",  title: "Politisk Pub" },
+            { date: "30. september 2026",  title: "Sosialdemokratisk Bokklubb" },
+            { date: "14. oktober 2026",    title: "Sosialt Samvær" },
+            { date: "28. oktober 2026",    title: "Politisk Pub" },
+            { date: "11. november 2026",   title: "Sosialdemokratisk Bokklubb" }
         ];
 
-        // Function to parse Norwegian date format
-        function parseNorwegianDate(dateStr) {
-            const monthMap = {
-                'januar': 0, 'februar': 1, 'mars': 2, 'april': 3, 'mai': 4, 'juni': 5,
-                'juli': 6, 'august': 7, 'september': 8, 'oktober': 9, 'november': 10, 'desember': 11
-            };
+        const monthMap = {
+            'januar':0,'februar':1,'mars':2,'april':3,'mai':4,'juni':5,
+            'juli':6,'august':7,'september':8,'oktober':9,'november':10,'desember':11
+        };
 
-            const parts = dateStr.toLowerCase().split(' ');
-            const day = parseInt(parts[0]);
-            const month = monthMap[parts[1]];
-            const year = parseInt(parts[2]);
-
-            return new Date(year, month, day);
+        function parseDate(str) {
+            const [day, month, year] = str.toLowerCase().split(' ');
+            return new Date(parseInt(year), monthMap[month], parseInt(day));
         }
 
-        // Initialize page
-        function initializePage() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+        const today = new Date(); today.setHours(0,0,0,0);
+        const grid = document.getElementById('eventsGrid');
+        let nextSet = false;
 
-            let nextEvent = null;
-            let nextEventIndex = -1;
+        events.forEach((event, i) => {
+            const d = parseDate(event.date);
+            const past = d < today;
 
-            // Find next event and render all events
-            const grid = document.getElementById('eventsGrid');
-
-            events.forEach((event, index) => {
-                const eventDate = parseNorwegianDate(event.date);
-                const isPast = eventDate < today;
-
-                // Find the next upcoming event
-                if (!isPast && !nextEvent) {
-                    nextEvent = event;
-                    nextEventIndex = index;
-                }
-
-                // Create card
-                const card = document.createElement('div');
-                card.className = `week-card${isPast ? ' past' : ''}`;
-                card.innerHTML = `
-                    <div class="week-card-header">
-                        <div class="week-number">Aktivitet ${index + 1}</div>
-                        <div class="activity-title">${event.title}</div>
-                    </div>
-                    <div class="week-card-body">
-                        <span class="activity-icon">${event.icon}</span>
-                        <div class="detail">
-                            <span class="detail-icon">📅</span>
-                            <div>
-                                <span class="detail-label">Onsdag</span>
-                                <div class="detail-text">${event.date}</div>
-                            </div>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-icon">🕕</span>
-                            <div>
-                                <span class="detail-label">Klokkeslett</span>
-                                <div class="detail-text">18:00</div>
-                            </div>
-                        </div>
-                        <div class="detail">
-                            <span class="detail-icon">📍</span>
-                            <div>
-                                <span class="detail-label">Sted</span>
-                                <div class="detail-text">Shamrock Pub</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            // Update next event banner if there is one
-            if (nextEvent) {
-                document.getElementById('nextEventName').textContent = nextEvent.title;
-                document.getElementById('nextEventDate').textContent = nextEvent.date;
+            if (!past && !nextSet) {
+                document.getElementById('nextEventName').textContent = event.title;
+                document.getElementById('nextEventDate').textContent = event.date;
                 document.getElementById('nextEventBanner').style.display = 'block';
+                nextSet = true;
             }
-        }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', initializePage);
+            const card = document.createElement('div');
+            card.className = 'event-card' + (past ? ' past' : '');
+            card.innerHTML = `
+                <div class="card-label">Aktivitet ${i + 1}</div>
+                <div class="card-title">${event.title}</div>
+                <div class="card-detail">Onsdag ${event.date}</div>
+                <div class="card-detail">Kl. 18:00 · Shamrock Pub</div>
+            `;
+            grid.appendChild(card);
+        });
     </script>
 </body>
 </html>
