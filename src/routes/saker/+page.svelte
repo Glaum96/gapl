@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { invalidateAll } from '$app/navigation';
 	import { CATEGORIES, categoryLabel } from '$lib/categories.js';
 	import type { Case } from '$lib/einnsyn.js';
 
 	let { data } = $props();
 
 	const categoryKeys = Object.keys(CATEGORIES);
+
+	let refreshing = $state(false);
+
+	async function handleRefresh() {
+		refreshing = true;
+		await fetch('/api/refresh', { method: 'POST' });
+		await invalidateAll();
+		refreshing = false;
+	}
 
 	// Preferences stored in localStorage
 	let interests: Set<string> = $state(new Set());
@@ -65,8 +75,19 @@
 </svelte:head>
 
 <div class="container">
-	<h1 class="section-heading" style="margin-bottom:0.25rem">Politiske saker</h1>
-	<p class="section-sub">Saker fra Grünerløkka bydelsutvalg via eInnsyn</p>
+	<div class="page-header">
+		<div>
+			<h1 class="section-heading" style="margin-bottom:0.25rem">Politiske saker</h1>
+			<p class="section-sub">Saker fra Grünerløkka bydelsutvalg via eInnsyn</p>
+		</div>
+		<button class="refresh-btn" onclick={handleRefresh} disabled={refreshing}>
+			{#if refreshing}
+				<span class="refresh-spinner"></span>Henter…
+			{:else}
+				↻ Oppdater
+			{/if}
+		</button>
+	</div>
 
 	<div class="controls">
 		<div class="filter-bar">
@@ -105,9 +126,7 @@
 		</div>
 	</div>
 
-	{#if data.cases.length === 0}
-		<p class="empty-state">Laster saker fra eInnsyn…</p>
-	{:else if filtered.length === 0}
+	{#if filtered.length === 0}
 		<p class="empty-state">Ingen saker matcher valgte filtre.</p>
 	{:else}
 		<div class="cards-grid">
@@ -129,6 +148,52 @@
 </div>
 
 <style>
+	.page-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.refresh-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: 'Barlow Condensed', sans-serif;
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		padding: 0.4rem 0.9rem;
+		background: transparent;
+		border: 1.5px solid var(--burgunder);
+		color: var(--burgunder);
+		cursor: pointer;
+		transition: all 0.15s;
+		flex-shrink: 0;
+		margin-top: 0.25rem;
+	}
+
+	.refresh-btn:hover:not(:disabled) {
+		background: var(--burgunder);
+		color: var(--krem);
+	}
+
+	.refresh-btn:disabled {
+		opacity: 0.45;
+		cursor: default;
+	}
+
+	.refresh-spinner {
+		width: 0.75rem;
+		height: 0.75rem;
+		border: 2px solid currentColor;
+		border-top-color: transparent;
+		border-radius: 50%;
+		animation: spin 0.6s linear infinite;
+	}
+
 	.controls {
 		margin-bottom: 2rem;
 		display: flex;
@@ -181,5 +246,9 @@
 		color: var(--burgunder);
 		opacity: 0.6;
 		padding: 3rem 0;
+	}
+
+	@keyframes spin {
+		to { transform: rotate(360deg); }
 	}
 </style>

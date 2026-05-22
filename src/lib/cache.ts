@@ -1,14 +1,29 @@
 import { fetchCases, type Case } from './einnsyn.js';
+import { getCasesCollection } from './db.js';
 
-const TTL_MS = 60 * 60 * 1000; // 60 min
+const TTL_MS = 24 * 60 * 60 * 1000;
 
-let cache: { cases: Case[]; fetchedAt: number } | null = null;
+interface CaseDoc extends Case {
+	cachedAt: number;
+}
 
 export async function getCases(): Promise<Case[]> {
-	if (cache && Date.now() - cache.fetchedAt < TTL_MS) {
-		return cache.cases;
+	const col = await getCasesCollection();
+	const first = await col.findOne<CaseDoc>({});
+	if (first && Date.now() - first.cachedAt < TTL_MS) {
+		const docs = await col.find<CaseDoc>({}).toArray();
+		return docs.map(({ cachedAt: _, _id: __, ...c }) => c as Case);
 	}
+	return refreshCases();
+}
+
+export async function refreshCases(): Promise<Case[]> {
+	const col = await getCasesCollection();
 	const cases = await fetchCases();
-	cache = { cases, fetchedAt: Date.now() };
+	const cachedAt = Date.now();
+	await col.deleteMany({});
+	if (cases.length) {
+		await col.insertMany(cases.map((c) => ({ ...c, cachedAt })));
+	}
 	return cases;
 }

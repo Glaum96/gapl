@@ -1,7 +1,7 @@
 import { getCases } from '$lib/cache.js';
-import type { PageLoad } from './$types';
+import type { PageServerLoad } from './$types';
 
-export const load: PageLoad = async () => {
+export const load: PageServerLoad = async () => {
 	const cases = await getCases();
 	return { cases };
 };

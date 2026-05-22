@@ -10,7 +10,7 @@
 		<a href="/" class="header-brand">
 			<img src="/logo.png" alt="Arbeiderpartiet logo" class="header-logo" />
 			<div class="header-text">
-				<span class="header-title">Grünerløkka<br />Arbeiderpartilag</span>
+				<span class="header-title">Grünerløkka Arbeiderpartilag</span>
 			</div>
 		</a>
 		<nav>
@@ -33,8 +33,8 @@
 <style>
 	header {
 		background: var(--burgunder);
-		border-bottom: 4px solid var(--rod);
-		padding: 1.5rem 2rem;
+		border-bottom: 3px solid var(--rod);
+		padding: 0.75rem 2rem;
 	}
 
 	.header-inner {
@@ -55,8 +55,8 @@
 	}
 
 	.header-logo {
-		width: 72px;
-		height: 72px;
+		width: 40px;
+		height: 40px;
 		object-fit: contain;
 		flex-shrink: 0;
 	}
@@ -64,38 +64,47 @@
 	.header-title {
 		font-family: 'Barlow Condensed', sans-serif;
 		font-weight: 800;
-		font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+		font-size: clamp(1.1rem, 2.5vw, 1.7rem);
 		text-transform: uppercase;
 		color: var(--krem);
 		letter-spacing: 0.02em;
 		line-height: 1.05;
+		white-space: nowrap;
 	}
 
 	nav ul {
 		list-style: none;
 		display: flex;
-		gap: 0.25rem;
+		gap: 0.5rem;
 	}
 
 	.nav-links a {
-		font-size: 0.9rem;
-		font-weight: 600;
+		font-size: 0.85rem;
+		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.07em;
-		color: rgba(253, 250, 244, 0.65);
+		color: rgba(253, 250, 244, 0.75);
 		text-decoration: none;
-		padding: 0.4rem 0.9rem;
-		transition: color 0.15s;
+		padding: 0.45rem 1rem;
+		border: 1.5px solid rgba(253, 250, 244, 0.25);
+		transition: all 0.15s;
 	}
 
-	.nav-links a:hover,
-	.nav-links a.active {
+	.nav-links a:hover {
 		color: var(--krem);
+		border-color: rgba(253, 250, 244, 0.6);
+		background: rgba(253, 250, 244, 0.08);
+	}
+
+	.nav-links a.active {
+		color: var(--burgunder);
+		background: var(--krem);
+		border-color: var(--krem);
 	}
 
 	@media (max-width: 640px) {
-		header { padding: 1.25rem; }
-		.header-logo { width: 52px; height: 52px; }
-		.header-inner { gap: 1rem; }
+		header { padding: 0.6rem 1rem; }
+		.header-logo { width: 32px; height: 32px; }
+		.header-inner { gap: 0.75rem; }
 	}
 </style>
