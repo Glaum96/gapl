@@ -1,0 +1,286 @@
+:root {
+	--krem: #fdfaf4;
+	--rod: #e31c28;
+	--burgunder: #560522;
+	--sort: #000000;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Inter', sans-serif;
+	background: var(--krem);
+	color: var(--burgunder);
+	line-height: 1.6;
+}
+
+a {
+	color: var(--rod);
+}
+
+/* NAV */
+nav {
+	background: var(--burgunder);
+	padding: 0 2rem;
+}
+
+.nav-inner {
+	max-width: 1100px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	height: 52px;
+}
+
+.nav-logo {
+	font-family: 'Barlow Condensed', sans-serif;
+	font-weight: 800;
+	font-size: 1.1rem;
+	text-transform: uppercase;
+	color: var(--krem);
+	text-decoration: none;
+	letter-spacing: 0.04em;
+	white-space: nowrap;
+}
+
+.nav-links {
+	display: flex;
+	gap: 0.25rem;
+	list-style: none;
+}
+
+.nav-links a {
+	font-size: 0.85rem;
+	font-weight: 500;
+	color: rgba(253, 250, 244, 0.7);
+	text-decoration: none;
+	padding: 0.35rem 0.75rem;
+	transition: color 0.15s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+	color: var(--krem);
+}
+
+/* HERO */
+.hero {
+	background: var(--krem);
+	padding: 4rem 2rem 3rem;
+	border-bottom: 3px solid var(--rod);
+}
+
+.hero-content {
+	max-width: 1100px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 2.5rem;
+	flex-wrap: wrap;
+}
+
+.logo-container {
+	width: 120px;
+	height: 120px;
+	flex-shrink: 0;
+}
+
+.logo-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.hero-text h1 {
+	font-family: 'Barlow Condensed', sans-serif;
+	font-weight: 800;
+	font-size: clamp(2.8rem, 6vw, 5rem);
+	text-transform: uppercase;
+	color: var(--rod);
+	letter-spacing: 0.02em;
+	line-height: 1;
+	margin-bottom: 0.4rem;
+}
+
+.hero-text .subtitle {
+	font-size: 1.05rem;
+	color: var(--burgunder);
+}
+
+/* CONTAINER */
+.container {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 3rem 2rem;
+}
+
+/* SECTION HEADING */
+.section-heading {
+	font-family: 'Barlow Condensed', sans-serif;
+	font-weight: 800;
+	font-size: 2rem;
+	text-transform: uppercase;
+	color: var(--rod);
+	letter-spacing: 0.02em;
+	margin-bottom: 0.4rem;
+}
+
+.section-sub {
+	font-size: 0.95rem;
+	color: var(--burgunder);
+	margin-bottom: 2rem;
+	opacity: 0.75;
+}
+
+/* CARDS GRID */
+.cards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 1px;
+	background: rgba(86, 5, 34, 0.12);
+	border: 1px solid rgba(86, 5, 34, 0.12);
+	margin-bottom: 4rem;
+}
+
+.card {
+	background: var(--krem);
+	padding: 1.5rem;
+	transition: background 0.15s;
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+.card:hover {
+	background: #f5ede0;
+}
+
+.card-label {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--rod);
+	margin-bottom: 0.4rem;
+}
+
+.card-title {
+	font-family: 'Barlow Condensed', sans-serif;
+	font-weight: 700;
+	font-size: 1.3rem;
+	text-transform: uppercase;
+	color: var(--burgunder);
+	line-height: 1.15;
+	margin-bottom: 0.75rem;
+}
+
+.card-detail {
+	font-size: 0.88rem;
+	color: var(--burgunder);
+	opacity: 0.8;
+	margin-bottom: 0.25rem;
+}
+
+/* BADGES */
+.badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	margin-top: 0.75rem;
+}
+
+.badge {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	padding: 0.2rem 0.5rem;
+	background: var(--rod);
+	color: var(--krem);
+}
+
+.badge.secondary {
+	background: transparent;
+	color: var(--burgunder);
+	border: 1px solid rgba(86, 5, 34, 0.3);
+}
+
+/* FILTER BAR */
+.filter-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-bottom: 2rem;
+}
+
+.filter-btn {
+	font-family: 'Inter', sans-serif;
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	padding: 0.4rem 0.85rem;
+	border: 1px solid rgba(86, 5, 34, 0.3);
+	background: transparent;
+	color: var(--burgunder);
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+.filter-btn:hover {
+	border-color: var(--rod);
+	color: var(--rod);
+}
+
+.filter-btn.active {
+	background: var(--rod);
+	border-color: var(--rod);
+	color: var(--krem);
+}
+
+/* FOOTER */
+footer {
+	background: var(--burgunder);
+	color: var(--krem);
+	padding: 2.5rem 2rem;
+	text-align: center;
+}
+
+footer p {
+	font-size: 0.9rem;
+	margin: 0.3rem 0;
+	opacity: 0.9;
+}
+
+.footer-name {
+	font-family: 'Barlow Condensed', sans-serif;
+	font-weight: 700;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	opacity: 1 !important;
+	margin-bottom: 0.5rem;
+}
+
+footer a {
+	color: var(--krem);
+	opacity: 0.7;
+	text-decoration: none;
+}
+
+footer a:hover {
+	opacity: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+	.hero-content { gap: 1.5rem; }
+	.logo-container { width: 80px; height: 80px; }
+	.container { padding: 2rem 1.25rem; }
+	nav { padding: 0 1.25rem; }
+}

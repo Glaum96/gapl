@@ -1,0 +1,185 @@
+<script lang="ts">
+	import { browser } from '$app/environment';
+	import { CATEGORIES, categoryLabel } from '$lib/categories.js';
+	import type { Case } from '$lib/einnsyn.js';
+
+	let { data } = $props();
+
+	const categoryKeys = Object.keys(CATEGORIES);
+
+	// Preferences stored in localStorage
+	let interests: Set<string> = $state(new Set());
+	let onlyInterests = $state(false);
+	let activeFilter: string | null = $state(null);
+
+	if (browser) {
+		const stored = localStorage.getItem('gapl-interests');
+		if (stored) {
+			try { interests = new Set(JSON.parse(stored)); } catch { /* ignore */ }
+		}
+	}
+
+	function toggleInterest(key: string) {
+		if (interests.has(key)) interests.delete(key);
+		else interests.add(key);
+		interests = new Set(interests); // trigger reactivity
+		if (browser) localStorage.setItem('gapl-interests', JSON.stringify([...interests]));
+	}
+
+	function setFilter(key: string | null) {
+		activeFilter = activeFilter === key ? null : key;
+	}
+
+	const filtered: Case[] = $derived(
+		data.cases.filter((c) => {
+			if (onlyInterests && interests.size > 0) {
+				if (!c.categories.some((cat) => interests.has(cat))) return false;
+			}
+			if (activeFilter) {
+				if (!c.categories.includes(activeFilter)) return false;
+			}
+			return true;
+		})
+	);
+
+	function docTypeLabel(t: string): string {
+		const labels: Record<string, string> = {
+			innkalling: 'Innkalling',
+			tilleggsinnkalling: 'Tilleggsinnkalling',
+			protokoll: 'Protokoll',
+			sakskart: 'Sakskart',
+			moetesak: 'Møtesak',
+			annet: 'Dokument'
+		};
+		return labels[t] ?? t;
+	}
+
+	function formatDate(iso: string | null): string {
+		if (!iso) return '';
+		return new Date(iso).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' });
+	}
+</script>
+
+<svelte:head>
+	<title>Politiske saker | Grünerløkka Arbeiderpartilag</title>
+</svelte:head>
+
+<div class="container">
+	<h1 class="section-heading" style="margin-bottom:0.25rem">Politiske saker</h1>
+	<p class="section-sub">Saker fra Grünerløkka bydelsutvalg via eInnsyn</p>
+
+	<div class="controls">
+		<div class="filter-bar">
+			{#each categoryKeys as key}
+				<button
+					class="filter-btn"
+					class:active={activeFilter === key}
+					onclick={() => setFilter(key)}
+				>
+					{categoryLabel(key)}
+				</button>
+			{/each}
+		</div>
+
+		<div class="interest-row">
+			<button
+				class="filter-btn"
+				class:active={onlyInterests}
+				onclick={() => (onlyInterests = !onlyInterests)}
+			>
+				Kun mine interesser
+			</button>
+			<span class="interest-hint">
+				Rediger interesser:
+				{#each categoryKeys as key}
+					<button
+						class="interest-chip"
+						class:selected={interests.has(key)}
+						onclick={() => toggleInterest(key)}
+						title={categoryLabel(key)}
+					>
+						{categoryLabel(key)}
+					</button>
+				{/each}
+			</span>
+		</div>
+	</div>
+
+	{#if data.cases.length === 0}
+		<p class="empty-state">Laster saker fra eInnsyn…</p>
+	{:else if filtered.length === 0}
+		<p class="empty-state">Ingen saker matcher valgte filtre.</p>
+	{:else}
+		<div class="cards-grid">
+			{#each filtered as c}
+				<a href="/saker/{encodeURIComponent(c.einnsynId)}" class="card">
+					<div class="card-label">{docTypeLabel(c.documentType)}{c.publishedAt ? ` · ${formatDate(c.publishedAt)}` : ''}</div>
+					<div class="card-title">{c.title}</div>
+					{#if c.categories.length}
+						<div class="badges">
+							{#each c.categories as cat}
+								<span class="badge secondary">{categoryLabel(cat)}</span>
+							{/each}
+						</div>
+					{/if}
+				</a>
+			{/each}
+		</div>
+	{/if}
+</div>
+
+<style>
+	.controls {
+		margin-bottom: 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.interest-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.interest-hint {
+		font-size: 0.8rem;
+		color: var(--burgunder);
+		opacity: 0.7;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3rem;
+	}
+
+	.interest-chip {
+		font-size: 0.72rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		padding: 0.2rem 0.5rem;
+		border: 1px solid rgba(86, 5, 34, 0.25);
+		background: transparent;
+		color: var(--burgunder);
+		cursor: pointer;
+		opacity: 0.6;
+		transition: all 0.15s;
+	}
+
+	.interest-chip.selected {
+		background: var(--burgunder);
+		border-color: var(--burgunder);
+		color: var(--krem);
+		opacity: 1;
+	}
+
+	.interest-chip:hover { opacity: 1; }
+
+	.empty-state {
+		font-size: 1rem;
+		color: var(--burgunder);
+		opacity: 0.6;
+		padding: 3rem 0;
+	}
+</style>
