@@ -18,7 +18,7 @@ export const actions: Actions = {
 
 		try {
 			const user = await createUser(email, password, name);
-			const token = await createSession(String(user._id ?? user.email));
+			const token = await createSession(user.email);
 			cookies.set('session', token, {
 				path: '/',
 				httpOnly: true,

@@ -21,7 +21,7 @@ export const actions: Actions = {
 			return fail(401, { error: 'Feil e-post eller passord' });
 		}
 
-		const token = await createSession(String(user._id ?? user.email));
+		const token = await createSession(user.email);
 		cookies.set('session', token, {
 			path: '/',
 			httpOnly: true,
