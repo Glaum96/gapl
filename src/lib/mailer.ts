@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { env } from '$env/dynamic/private';
 import { categoryLabel } from './categories.js';
+import { getUsersCollection } from './db.js';
 import type { Case } from './einnsyn.js';
 
 function getResend(): Resend {
@@ -9,6 +10,104 @@ function getResend(): Resend {
 }
 
 const FROM = 'Grünerløkka Arbeiderpartilag <noreply@gapl.no>';
+
+async function getAdminEmails(): Promise<string[]> {
+	const col = await getUsersCollection();
+	const admins = await col
+		.find<{ email: string }>({ role: 'admin' }, { projection: { email: 1 } })
+		.toArray();
+	return admins.map((a) => a.email);
+}
+
+function emailHeader(): string {
+	return `<div style="background:#560522;padding:1.25rem 2rem;margin-bottom:1.5rem">
+  <h1 style="color:#fdfaf4;font-size:1.1rem;margin:0;font-weight:800;text-transform:uppercase;letter-spacing:0.02em">
+    Grünerløkka Arbeiderpartilag
+  </h1>
+</div>`;
+}
+
+export async function notifyAdminsNewProposal(opts: {
+	userName: string;
+	caseId: string;
+	text: string;
+}): Promise<void> {
+	if (!env.RESEND_API_KEY) return;
+	const to = await getAdminEmails();
+	if (!to.length) return;
+	const caseUrl = `https://gapl.no/saker/${encodeURIComponent(opts.caseId)}`;
+	await getResend().emails.send({
+		from: FROM,
+		to,
+		subject: `Nytt innspill fra ${opts.userName}`,
+		html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a">
+  ${emailHeader()}
+  <div style="padding:0 2rem 2rem">
+    <p><strong>${opts.userName}</strong> har lagt inn et innspill:</p>
+    <blockquote style="border-left:3px solid #560522;margin:1rem 0;padding:0.5rem 1rem;background:#fdfaf4;color:#560522">
+      ${opts.text}
+    </blockquote>
+    <p><a href="${caseUrl}" style="color:#560522;font-weight:600">Se saken →</a></p>
+  </div>
+</div>`
+	});
+}
+
+export async function notifyAdminsNewComment(opts: {
+	userName: string;
+	caseId: string;
+	proposalText: string;
+	commentText: string;
+}): Promise<void> {
+	if (!env.RESEND_API_KEY) return;
+	const to = await getAdminEmails();
+	if (!to.length) return;
+	const caseUrl = `https://gapl.no/saker/${encodeURIComponent(opts.caseId)}`;
+	await getResend().emails.send({
+		from: FROM,
+		to,
+		subject: `Ny kommentar fra ${opts.userName}`,
+		html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a">
+  ${emailHeader()}
+  <div style="padding:0 2rem 2rem">
+    <p><strong>${opts.userName}</strong> har kommentert på et innspill:</p>
+    <p style="font-size:0.85rem;color:#888">Innspill: <em>${opts.proposalText}</em></p>
+    <blockquote style="border-left:3px solid #560522;margin:1rem 0;padding:0.5rem 1rem;background:#fdfaf4;color:#560522">
+      ${opts.commentText}
+    </blockquote>
+    <p><a href="${caseUrl}" style="color:#560522;font-weight:600">Se saken →</a></p>
+  </div>
+</div>`
+	});
+}
+
+export async function notifyAdminsNewVote(opts: {
+	userName: string;
+	caseId: string;
+	proposalText: string;
+	vote: 1 | -1;
+}): Promise<void> {
+	if (!env.RESEND_API_KEY) return;
+	const to = await getAdminEmails();
+	if (!to.length) return;
+	const caseUrl = `https://gapl.no/saker/${encodeURIComponent(opts.caseId)}`;
+	const voteLabel = opts.vote === 1 ? '👍 støttet' : '👎 stemte ned';
+	await getResend().emails.send({
+		from: FROM,
+		to,
+		subject: `${opts.userName} ${voteLabel} et innspill`,
+		html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#1a1a1a">
+  ${emailHeader()}
+  <div style="padding:0 2rem 2rem">
+    <p><strong>${opts.userName}</strong> har ${voteLabel} dette innspillet:</p>
+    <blockquote style="border-left:3px solid #560522;margin:1rem 0;padding:0.5rem 1rem;background:#fdfaf4;color:#560522">
+      ${opts.proposalText}
+    </blockquote>
+    <p><a href="${caseUrl}" style="color:#560522;font-weight:600">Se saken →</a></p>
+  </div>
+</div>`
+	});
+}
 
 export async function sendCategoryAlerts(
 	newCases: Case[],

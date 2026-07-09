@@ -113,6 +113,16 @@ export async function castVote(
 	}
 }
 
+export async function getProposalById(id: string): Promise<Proposal | null> {
+	const col = await getProposalsCollection();
+	const { ObjectId } = await import('mongodb');
+	try {
+		return col.findOne<Proposal>({ _id: new ObjectId(id) });
+	} catch {
+		return null;
+	}
+}
+
 export async function addComment(
 	proposalId: string,
 	caseId: string,
