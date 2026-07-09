@@ -78,13 +78,13 @@
 	<div class="page-header">
 		<div>
 			<h1 class="section-heading" style="margin-bottom:0.25rem">Politiske saker</h1>
-			<p class="section-sub">Saker fra Grünerløkka bydelsutvalg via eInnsyn</p>
+			<p class="section-sub">Saker fra Grünerløkka bydelsutvalg via <img src="/e-innsyn.svg" alt="eInnsyn" class="einnsyn-logo-inline" /></p>
 		</div>
 		<button class="refresh-btn" onclick={handleRefresh} disabled={refreshing}>
 			{#if refreshing}
 				<span class="refresh-spinner"></span>Henter…
 			{:else}
-				↻ Oppdater
+				↻ Oppdater fra <img src="/e-innsyn.svg" alt="eInnsyn" class="einnsyn-logo" />
 			{/if}
 		</button>
 	</div>
@@ -183,6 +183,26 @@
 	.refresh-btn:disabled {
 		opacity: 0.45;
 		cursor: default;
+	}
+
+	.einnsyn-logo-inline {
+		height: 1em;
+		width: auto;
+		vertical-align: middle;
+		filter: brightness(0) saturate(100%) invert(23%) sepia(57%) saturate(500%) hue-rotate(270deg);
+		opacity: 0.7;
+	}
+
+	.einnsyn-logo {
+		height: 0.85em;
+		width: auto;
+		vertical-align: middle;
+		filter: brightness(0) saturate(100%) invert(23%) sepia(57%) saturate(500%) hue-rotate(270deg);
+		transition: filter 0.15s;
+	}
+
+	.refresh-btn:hover:not(:disabled) .einnsyn-logo {
+		filter: brightness(0) saturate(100%) invert(97%) sepia(5%) saturate(400%) hue-rotate(20deg);
 	}
 
 	.refresh-spinner {

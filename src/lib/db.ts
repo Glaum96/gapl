@@ -5,8 +5,14 @@ let client: MongoClient | null = null;
 
 async function getClient(): Promise<MongoClient> {
 	if (!client) {
-		client = new MongoClient(env.MONGODB_URI);
-		await client.connect();
+		const c = new MongoClient(env.MONGODB_URI);
+		try {
+			await c.connect();
+		} catch (err) {
+			await c.close().catch(() => {});
+			throw err;
+		}
+		client = c;
 	}
 	return client;
 }
