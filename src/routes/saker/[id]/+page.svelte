@@ -6,15 +6,18 @@
 	let { data } = $props();
 	const c = $derived(data.case);
 
-	let proposals: ProposalWithStats[] = $derived(data.proposals);
+	// Local state for optimistic updates; syncs back when server data arrives
+	let proposals: ProposalWithStats[] = $state([...data.proposals]);
+	$effect(() => {
+		const incoming = data.proposals;
+		proposals = [...incoming];
+	});
 
 	let proposalText = $state('');
-	let submittingProposal = $state(false);
 	let proposalError = $state('');
 
 	let openComments: Set<string> = $state(new Set());
 	let commentTexts: Record<string, string> = $state({});
-	let submittingComment: Record<string, boolean> = $state({});
 
 	function docTypeLabel(t: string): string {
 		const labels: Record<string, string> = {
@@ -42,31 +45,68 @@
 	}
 
 	async function submitProposal() {
-		if (!proposalText.trim()) return;
-		submittingProposal = true;
+		const text = proposalText.trim();
+		if (!text) return;
 		proposalError = '';
+
+		// Optimistic: legg til med temp-id
+		const tempId = 'temp-' + Date.now();
+		proposals = [
+			...proposals,
+			{
+				id: tempId,
+				caseId: c.einnsynId,
+				userId: data.user!.email,
+				userName: data.user!.name,
+				text,
+				createdAt: Date.now(),
+				upvotes: 0,
+				downvotes: 0,
+				userVote: null,
+				comments: []
+			}
+		];
+		proposalText = '';
+
 		const res = await fetch('/api/proposals', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ caseId: c.einnsynId, text: proposalText })
+			body: JSON.stringify({ caseId: c.einnsynId, text })
 		});
-		if (res.ok) {
-			proposalText = '';
-			await invalidateAll();
-		} else {
+		if (!res.ok) {
+			proposals = proposals.filter((p) => p.id !== tempId);
+			proposalText = text;
 			const err = await res.json().catch(() => ({}));
 			proposalError = err.message ?? 'Noe gikk galt';
 		}
-		submittingProposal = false;
+		// $effect synkroniserer med ekte data fra server
+		invalidateAll();
 	}
 
 	async function vote(proposal: ProposalWithStats, v: 1 | -1) {
-		const res = await fetch(`/api/proposals/${proposal.id}/vote`, {
+		const idx = proposals.findIndex((p) => p.id === proposal.id);
+		if (idx === -1) return;
+		const p = proposals[idx];
+		const retracting = p.userVote === v;
+		const switching = p.userVote !== null && p.userVote !== v;
+
+		// Optimistisk stemme-oppdatering
+		proposals[idx] = {
+			...p,
+			userVote: retracting ? null : v,
+			upvotes:
+				p.upvotes +
+				(v === 1 ? (retracting ? -1 : 1) : switching ? -1 : 0),
+			downvotes:
+				p.downvotes +
+				(v === -1 ? (retracting ? -1 : 1) : switching ? -1 : 0)
+		};
+
+		fetch(`/api/proposals/${proposal.id}/vote`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ vote: v, caseId: c.einnsynId })
-		});
-		if (res.ok) await invalidateAll();
+		}).then(() => invalidateAll());
 	}
 
 	function toggleComments(id: string) {
@@ -77,20 +117,36 @@
 	}
 
 	async function submitComment(proposal: ProposalWithStats) {
-		const id = String(proposal.id);
-		const text = commentTexts[id];
-		if (!text?.trim()) return;
-		submittingComment = { ...submittingComment, [id]: true };
-		const res = await fetch(`/api/proposals/${id}/comments`, {
+		const id = proposal.id;
+		const text = commentTexts[id]?.trim();
+		if (!text) return;
+
+		// Optimistisk kommentar
+		const idx = proposals.findIndex((p) => p.id === id);
+		if (idx !== -1) {
+			proposals[idx] = {
+				...proposals[idx],
+				comments: [
+					...proposals[idx].comments,
+					{
+						id: 'temp-' + Date.now(),
+						proposalId: id,
+						caseId: c.einnsynId,
+						userId: data.user!.email,
+						userName: data.user!.name,
+						text,
+						createdAt: Date.now()
+					}
+				]
+			};
+		}
+		commentTexts = { ...commentTexts, [id]: '' };
+
+		fetch(`/api/proposals/${id}/comments`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ caseId: c.einnsynId, text })
-		});
-		if (res.ok) {
-			commentTexts = { ...commentTexts, [id]: '' };
-			await invalidateAll();
-		}
-		submittingComment = { ...submittingComment, [id]: false };
+		}).then(() => invalidateAll());
 	}
 </script>
 
@@ -191,9 +247,9 @@
 											<button
 												class="submit-btn small"
 												onclick={() => submitComment(proposal)}
-												disabled={submittingComment[id] || !commentTexts[id]?.trim()}
+												disabled={!commentTexts[id]?.trim()}
 											>
-												{submittingComment[id] ? 'Sender…' : 'Send'}
+												Send
 											</button>
 										</div>
 									{:else}
@@ -225,9 +281,9 @@
 					<button
 						class="submit-btn"
 						onclick={submitProposal}
-						disabled={submittingProposal || !proposalText.trim()}
+						disabled={!proposalText.trim()}
 					>
-						{submittingProposal ? 'Sender…' : 'Send innspill'}
+						Send innspill
 					</button>
 				</div>
 			</div>
