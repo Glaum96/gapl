@@ -3,7 +3,10 @@ import { getCasesCollection } from './db.js';
 
 const TTL_MS = 24 * 60 * 60 * 1000;
 
+import type { ObjectId } from 'mongodb';
+
 interface CaseDoc extends Case {
+	_id?: ObjectId;
 	cachedAt: number;
 }
 

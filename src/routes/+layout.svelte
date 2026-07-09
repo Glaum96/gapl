@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { page } from '$app/stores';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <header>
@@ -19,6 +19,16 @@
 				<li><a href="/saker" class:active={$page.url.pathname.startsWith('/saker')}>Politiske saker</a></li>
 			</ul>
 		</nav>
+		<div class="auth-nav">
+			{#if data.user}
+				<span class="user-name">{data.user.name}</span>
+				<form method="POST" action="/auth/logout">
+					<button type="submit" class="nav-auth-btn">Logg ut</button>
+				</form>
+			{:else}
+				<a href="/auth/login" class="nav-auth-btn">Logg inn</a>
+			{/if}
+		</div>
 	</div>
 </header>
 
@@ -102,9 +112,44 @@
 		border-color: var(--krem);
 	}
 
+	.auth-nav {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-left: auto;
+	}
+
+	.user-name {
+		font-size: 0.8rem;
+		color: rgba(253, 250, 244, 0.6);
+		font-weight: 500;
+	}
+
+	.nav-auth-btn {
+		font-size: 0.8rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.07em;
+		color: rgba(253, 250, 244, 0.75);
+		text-decoration: none;
+		padding: 0.35rem 0.75rem;
+		border: 1.5px solid rgba(253, 250, 244, 0.25);
+		background: transparent;
+		font-family: inherit;
+		cursor: pointer;
+		transition: all 0.15s;
+	}
+
+	.nav-auth-btn:hover {
+		color: var(--krem);
+		border-color: rgba(253, 250, 244, 0.6);
+		background: rgba(253, 250, 244, 0.08);
+	}
+
 	@media (max-width: 640px) {
 		header { padding: 0.6rem 1rem; }
 		.header-logo { width: 32px; height: 32px; }
 		.header-inner { gap: 0.75rem; }
+		.user-name { display: none; }
 	}
 </style>

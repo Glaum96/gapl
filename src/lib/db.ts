@@ -5,7 +5,9 @@ let client: MongoClient | null = null;
 
 async function getClient(): Promise<MongoClient> {
 	if (!client) {
-		const c = new MongoClient(env.MONGODB_URI);
+		const uri = env.MONGODB_URI;
+		if (!uri) throw new Error('MONGODB_URI is not set');
+		const c = new MongoClient(uri);
 		try {
 			await c.connect();
 		} catch (err) {
@@ -17,7 +19,18 @@ async function getClient(): Promise<MongoClient> {
 	return client;
 }
 
+function db() {
+	return getClient().then((c) => c.db('gapl'));
+}
+
 export async function getCasesCollection(): Promise<Collection> {
-	const c = await getClient();
-	return c.db('gapl').collection('cases');
+	return (await db()).collection('cases');
+}
+
+export async function getUsersCollection(): Promise<Collection> {
+	return (await db()).collection('users');
+}
+
+export async function getSessionsCollection(): Promise<Collection> {
+	return (await db()).collection('sessions');
 }

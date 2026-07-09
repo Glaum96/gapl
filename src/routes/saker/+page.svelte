@@ -17,23 +17,36 @@
 		refreshing = false;
 	}
 
-	// Preferences stored in localStorage
-	let interests: Set<string> = $state(new Set());
+	// Preferences: use DB if logged in, localStorage otherwise
+	function loadInitialInterests(): Set<string> {
+		if (data.user) return new Set(data.user.interests);
+		if (browser) {
+			const stored = localStorage.getItem('gapl-interests');
+			if (stored) {
+				try { return new Set(JSON.parse(stored)); } catch { /* ignore */ }
+			}
+		}
+		return new Set();
+	}
+
+	let interests: Set<string> = $state(loadInitialInterests());
 	let onlyInterests = $state(false);
 	let activeFilter: string | null = $state(null);
 
-	if (browser) {
-		const stored = localStorage.getItem('gapl-interests');
-		if (stored) {
-			try { interests = new Set(JSON.parse(stored)); } catch { /* ignore */ }
-		}
-	}
-
-	function toggleInterest(key: string) {
+	async function toggleInterest(key: string) {
 		if (interests.has(key)) interests.delete(key);
 		else interests.add(key);
-		interests = new Set(interests); // trigger reactivity
-		if (browser) localStorage.setItem('gapl-interests', JSON.stringify([...interests]));
+		interests = new Set(interests);
+
+		if (data.user) {
+			await fetch('/api/interests', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ interests: [...interests] })
+			});
+		} else if (browser) {
+			localStorage.setItem('gapl-interests', JSON.stringify([...interests]));
+		}
 	}
 
 	function setFilter(key: string | null) {
