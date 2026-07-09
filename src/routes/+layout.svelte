@@ -55,15 +55,17 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 2rem;
-		flex-wrap: wrap;
+		gap: 1rem;
+		flex-wrap: nowrap;
 	}
 
 	.header-brand {
 		display: flex;
 		align-items: center;
-		gap: 1.25rem;
+		gap: 0.75rem;
 		text-decoration: none;
+		flex-shrink: 0;
+		min-width: 0;
 	}
 
 	.header-logo {
@@ -156,7 +158,8 @@
 	@media (max-width: 640px) {
 		header { padding: 0.6rem 1rem; }
 		.header-logo { width: 32px; height: 32px; }
-		.header-inner { gap: 0.75rem; }
+		.header-inner { gap: 0.5rem; }
+		.header-title { display: none; }
 		.user-name { display: none; }
 	}
 </style>
