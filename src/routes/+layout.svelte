@@ -13,21 +13,23 @@
 				<span class="header-title">Grünerløkka Arbeiderpartilag</span>
 			</div>
 		</a>
-		<nav>
-			<ul class="nav-links">
-				<li><a href="/arrangementer" class:active={$page.url.pathname === '/arrangementer'}>Arrangementer</a></li>
-				<li><a href="/saker" class:active={$page.url.pathname.startsWith('/saker')}>Politiske saker</a></li>
-			</ul>
-		</nav>
-		<div class="auth-nav">
-			{#if data.user}
-				<span class="user-name">{data.user.name}</span>
-				<form method="POST" action="/auth/logout">
-					<button type="submit" class="nav-auth-btn">Logg ut</button>
-				</form>
-			{:else}
-				<a href="/auth/login" class="nav-auth-btn">Logg inn</a>
-			{/if}
+		<div class="nav-group">
+			<nav>
+				<ul class="nav-links">
+					<li><a href="/arrangementer" class:active={$page.url.pathname === '/arrangementer'}>Arrangementer</a></li>
+					<li><a href="/saker" class:active={$page.url.pathname.startsWith('/saker')}>Politiske saker</a></li>
+				</ul>
+			</nav>
+			<div class="auth-nav">
+				{#if data.user}
+					<span class="user-name">{data.user.name}</span>
+					<form method="POST" action="/auth/logout">
+						<button type="submit" class="nav-auth-btn">Logg ut</button>
+					</form>
+				{:else}
+					<a href="/auth/login" class="nav-auth-btn">Logg inn</a>
+				{/if}
+			</div>
 		</div>
 	</div>
 </header>
@@ -112,11 +114,16 @@
 		border-color: var(--krem);
 	}
 
+	.nav-group {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
 	.auth-nav {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
-		margin-left: auto;
 	}
 
 	.user-name {
