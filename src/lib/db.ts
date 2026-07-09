@@ -34,3 +34,15 @@ export async function getUsersCollection(): Promise<Collection> {
 export async function getSessionsCollection(): Promise<Collection> {
 	return (await db()).collection('sessions');
 }
+
+export async function getProposalsCollection(): Promise<Collection> {
+	return (await db()).collection('proposals');
+}
+
+export async function getVotesCollection(): Promise<Collection> {
+	return (await db()).collection('votes');
+}
+
+export async function getCommentsCollection(): Promise<Collection> {
+	return (await db()).collection('comments');
+}
