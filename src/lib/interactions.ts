@@ -27,11 +27,17 @@ export interface Comment {
 	createdAt: number;
 }
 
-export interface ProposalWithStats extends Proposal {
+export interface ProposalWithStats {
+	id: string;
+	caseId: string;
+	userId: string;
+	userName: string;
+	text: string;
+	createdAt: number;
 	upvotes: number;
 	downvotes: number;
 	userVote: 1 | -1 | null;
-	comments: Comment[];
+	comments: Array<Omit<Comment, '_id'> & { id: string }>;
 }
 
 export async function getProposalsForCase(
@@ -52,11 +58,18 @@ export async function getProposalsForCase(
 		const id = String(p._id);
 		const pvotes = votes.filter((v) => v.proposalId === id);
 		return {
-			...p,
+			id,
+			caseId: p.caseId,
+			userId: p.userId,
+			userName: p.userName,
+			text: p.text,
+			createdAt: p.createdAt,
 			upvotes: pvotes.filter((v) => v.vote === 1).length,
 			downvotes: pvotes.filter((v) => v.vote === -1).length,
 			userVote: userId ? (pvotes.find((v) => v.userId === userId)?.vote ?? null) : null,
-			comments: comments.filter((c) => c.proposalId === id)
+			comments: comments
+				.filter((c) => c.proposalId === id)
+				.map(({ _id, ...rest }) => ({ id: String(_id), ...rest }))
 		};
 	});
 }

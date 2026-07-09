@@ -61,7 +61,7 @@
 	}
 
 	async function vote(proposal: ProposalWithStats, v: 1 | -1) {
-		const res = await fetch(`/api/proposals/${proposal._id}/vote`, {
+		const res = await fetch(`/api/proposals/${proposal.id}/vote`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ vote: v, caseId: c.einnsynId })
@@ -77,7 +77,7 @@
 	}
 
 	async function submitComment(proposal: ProposalWithStats) {
-		const id = String(proposal._id);
+		const id = String(proposal.id);
 		const text = commentTexts[id];
 		if (!text?.trim()) return;
 		submittingComment = { ...submittingComment, [id]: true };
@@ -130,8 +130,8 @@
 			<p class="empty-state">Ingen innspill ennå. Vær den første!</p>
 		{:else}
 			<div class="proposals-list">
-				{#each proposals as proposal (proposal._id)}
-					{@const id = String(proposal._id)}
+				{#each proposals as proposal (proposal.id)}
+					{@const id = String(proposal.id)}
 					<div class="proposal-card">
 						<div class="proposal-body">
 							<p class="proposal-text">{proposal.text}</p>
@@ -170,7 +170,7 @@
 								<div class="comments-section">
 									{#if proposal.comments.length > 0}
 										<div class="comments-list">
-											{#each proposal.comments as comment (comment._id)}
+											{#each proposal.comments as comment (comment.id)}
 												<div class="comment">
 													<span class="comment-author">{comment.userName}</span>
 													<span class="comment-date">{formatTime(comment.createdAt)}</span>
