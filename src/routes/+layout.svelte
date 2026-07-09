@@ -23,6 +23,9 @@
 			<div class="auth-nav">
 				{#if data.user}
 					<span class="user-name">{data.user.name}</span>
+					{#if data.user.role === 'admin'}
+						<a href="/admin" class="nav-auth-btn">Admin</a>
+					{/if}
 					<form method="POST" action="/auth/logout">
 						<button type="submit" class="nav-auth-btn">Logg ut</button>
 					</form>

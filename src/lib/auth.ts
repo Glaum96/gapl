@@ -9,6 +9,7 @@ export interface User {
 	passwordHash: string;
 	name: string;
 	interests: string[];
+	role?: 'admin' | 'user';
 	createdAt: number;
 }
 
@@ -74,4 +75,20 @@ export async function deleteSession(token: string): Promise<void> {
 export async function updateInterests(email: string, interests: string[]): Promise<void> {
 	const col = await getUsersCollection();
 	await col.updateOne({ email }, { $set: { interests } });
+}
+
+export async function setAdmin(email: string): Promise<void> {
+	const col = await getUsersCollection();
+	await col.updateOne({ email }, { $set: { role: 'admin' } });
+}
+
+export async function getAllUsers(): Promise<Array<Omit<User, 'passwordHash'>>> {
+	const col = await getUsersCollection();
+	return col
+		.find<User>({})
+		.sort({ createdAt: -1 })
+		.toArray()
+		.then((users) =>
+			users.map(({ passwordHash: _, ...u }) => u)
+		);
 }

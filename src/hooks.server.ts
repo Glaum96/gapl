@@ -9,7 +9,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			event.locals.user = {
 				email: user.email,
 				name: user.name,
-				interests: user.interests
+				interests: user.interests,
+				role: user.role ?? 'user'
 			};
 		}
 	}

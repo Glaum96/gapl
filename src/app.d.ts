@@ -8,6 +8,7 @@ declare global {
 				email: string;
 				name: string;
 				interests: string[];
+				role?: 'admin' | 'user';
 			};
 		}
 		interface PageData {
@@ -15,6 +16,7 @@ declare global {
 				email: string;
 				name: string;
 				interests: string[];
+				role?: 'admin' | 'user';
 			} | null;
 		}
 		// interface PageState {}
