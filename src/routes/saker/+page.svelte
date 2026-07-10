@@ -32,6 +32,7 @@
 	let interests: Set<string> = $state(loadInitialInterests());
 	let onlyInterests = $state(false);
 	let hideInnkalling = $state(true);
+	let hideProtokoll = $state(true);
 	let activeFilter: string | null = $state(null);
 
 	async function toggleInterest(key: string) {
@@ -57,6 +58,7 @@
 	const filtered: Case[] = $derived(
 		data.cases.filter((c) => {
 			if (hideInnkalling && (c.documentType === 'innkalling' || c.documentType === 'tilleggsinnkalling')) return false;
+			if (hideProtokoll && (c.documentType === 'protokoll' || c.documentType === 'sakskart')) return false;
 			if (onlyInterests && interests.size > 0) {
 				if (!c.categories.some((cat) => interests.has(cat))) return false;
 			}
@@ -121,6 +123,13 @@
 				onclick={() => (hideInnkalling = !hideInnkalling)}
 			>
 				Skjul innkallinger
+			</button>
+			<button
+				class="filter-btn filter-btn--muted"
+				class:active={hideProtokoll}
+				onclick={() => (hideProtokoll = !hideProtokoll)}
+			>
+				Skjul protokoller
 			</button>
 		</div>
 
