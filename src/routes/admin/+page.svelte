@@ -73,6 +73,22 @@
 	</section>
 
 	<section class="admin-section">
+		<h2 class="admin-heading">
+			AI-assistent
+			<span class="wip-badge">Kommer snart</span>
+		</h2>
+		<div class="wip-box">
+			<p class="wip-desc">Planlagte admin-verktøy:</p>
+			<ul class="wip-list">
+				<li>Last opp og administrer kunnskapsdokumenter (partiprogram, lokale vedtak, uttalelser)</li>
+				<li>Generer AI-sammendrag og forslag til partiets standpunkt per sak</li>
+				<li>Velg AI-motor og konfigurer modell</li>
+				<li>Se brukslogg og kostnadsoversikt</li>
+			</ul>
+		</div>
+	</section>
+
+	<section class="admin-section">
 		<h2 class="admin-heading">Innspill ({data.proposals.length})</h2>
 		<table class="admin-table">
 			<thead>
@@ -239,4 +255,55 @@
 	}
 
 	.delete-btn:disabled { opacity: 0.4; cursor: default; }
+
+	.wip-badge {
+		font-size: 0.65rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		padding: 0.15rem 0.5rem;
+		border: 1px solid rgba(86, 5, 34, 0.25);
+		color: var(--burgunder);
+		opacity: 0.5;
+		vertical-align: middle;
+		margin-left: 0.5rem;
+	}
+
+	.wip-box {
+		border: 1px dashed rgba(86, 5, 34, 0.2);
+		padding: 1.25rem 1.5rem;
+		background: rgba(86, 5, 34, 0.02);
+	}
+
+	.wip-desc {
+		font-size: 0.82rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--burgunder);
+		opacity: 0.5;
+		margin-bottom: 0.6rem;
+	}
+
+	.wip-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.wip-list li {
+		font-size: 0.88rem;
+		color: var(--burgunder);
+		opacity: 0.6;
+		padding-left: 1rem;
+		position: relative;
+	}
+
+	.wip-list li::before {
+		content: '—';
+		position: absolute;
+		left: 0;
+		opacity: 0.4;
+	}
 </style>

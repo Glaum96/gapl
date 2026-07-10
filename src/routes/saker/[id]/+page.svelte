@@ -325,6 +325,30 @@
 			</div>
 		{/if}
 	</section>
+
+	<!-- AI assistant section -->
+	{#if data.user}
+		<section class="ai-section">
+			<div class="ai-header">
+				<h2 class="section-heading" style="font-size:1.5rem; margin-bottom:0">AI-assistent</h2>
+				<span class="wip-badge">Kommer snart</span>
+			</div>
+			<div class="ai-chat-wip">
+				<p class="ai-wip-text">
+					Her vil du snart kunne stille spørsmål om saken og få svar satt i kontekst av Arbeiderpartiets politikk — lokalt, regionalt og nasjonalt.
+				</p>
+				<div class="ai-input-row">
+					<input
+						type="text"
+						class="ai-input"
+						placeholder="Still et spørsmål om saken…"
+						disabled
+					/>
+					<button class="submit-btn" disabled>Send</button>
+				</div>
+			</div>
+		</section>
+	{/if}
 </div>
 
 <style>
@@ -616,5 +640,61 @@
 		color: var(--burgunder);
 		opacity: 0.5;
 		margin-bottom: 2rem;
+	}
+
+	.ai-section {
+		border-top: 2px solid rgba(86, 5, 34, 0.12);
+		padding-top: 2.5rem;
+		margin-top: 2.5rem;
+	}
+
+	.ai-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.wip-badge {
+		font-size: 0.68rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		padding: 0.2rem 0.55rem;
+		border: 1.5px solid rgba(86, 5, 34, 0.25);
+		color: var(--burgunder);
+		opacity: 0.5;
+	}
+
+	.ai-chat-wip {
+		background: white;
+		border: 1px solid rgba(86, 5, 34, 0.15);
+		padding: 1.5rem;
+		opacity: 0.7;
+	}
+
+	.ai-wip-text {
+		font-size: 0.92rem;
+		color: var(--burgunder);
+		line-height: 1.55;
+		margin-bottom: 1.25rem;
+		font-style: italic;
+	}
+
+	.ai-input-row {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.ai-input {
+		flex: 1;
+		padding: 0.55rem 0.8rem;
+		border: 1.5px solid rgba(86, 5, 34, 0.2);
+		font-family: inherit;
+		font-size: 0.95rem;
+		color: var(--burgunder);
+		background: var(--krem);
+		outline: none;
+		cursor: not-allowed;
 	}
 </style>
