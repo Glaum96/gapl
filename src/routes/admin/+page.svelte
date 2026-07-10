@@ -14,11 +14,7 @@
 	async function deleteProposal(id: string) {
 		if (!confirm('Slett dette innspillet?')) return;
 		deletingId = id;
-		await fetch('/api/admin/delete-proposal', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ id })
-		});
+		await fetch(`/api/proposals/${id}/delete`, { method: 'POST' });
 		await invalidateAll();
 		deletingId = null;
 	}

@@ -105,6 +105,7 @@
 		padding: 0.45rem 1rem;
 		border: 1.5px solid rgba(253, 250, 244, 0.25);
 		transition: all 0.15s;
+		white-space: nowrap;
 	}
 
 	.nav-links a:hover {

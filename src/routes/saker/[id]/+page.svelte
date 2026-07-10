@@ -148,6 +148,28 @@
 			body: JSON.stringify({ caseId: c.einnsynId, text })
 		}).then(() => invalidateAll());
 	}
+
+	async function deleteProposal(proposal: ProposalWithStats) {
+		proposals = proposals.filter((p) => p.id !== proposal.id);
+		fetch(`/api/proposals/${proposal.id}/delete`, { method: 'POST' })
+			.then(() => invalidateAll());
+	}
+
+	async function deleteComment(proposal: ProposalWithStats, commentId: string) {
+		const idx = proposals.findIndex((p) => p.id === proposal.id);
+		if (idx !== -1) {
+			proposals[idx] = {
+				...proposals[idx],
+				comments: proposals[idx].comments.filter((c) => c.id !== commentId)
+			};
+		}
+		fetch(`/api/comments/${commentId}/delete`, { method: 'POST' })
+			.then(() => invalidateAll());
+	}
+
+	function canDelete(userId: string): boolean {
+		return !!data.user && (data.user.email === userId || data.user.role === 'admin');
+	}
 </script>
 
 <svelte:head>
@@ -191,7 +213,12 @@
 					<div class="proposal-card">
 						<div class="proposal-body">
 							<p class="proposal-text">{proposal.text}</p>
-							<p class="proposal-meta">{proposal.userName} · {formatTime(proposal.createdAt)}</p>
+							<div class="proposal-meta-row">
+								<p class="proposal-meta">{proposal.userName} · {formatTime(proposal.createdAt)}</p>
+								{#if canDelete(proposal.userId)}
+									<button class="inline-delete-btn" onclick={() => deleteProposal(proposal)}>Slett</button>
+								{/if}
+							</div>
 						</div>
 
 						<div class="proposal-actions">
@@ -228,8 +255,13 @@
 										<div class="comments-list">
 											{#each proposal.comments as comment (comment.id)}
 												<div class="comment">
-													<span class="comment-author">{comment.userName}</span>
-													<span class="comment-date">{formatTime(comment.createdAt)}</span>
+													<div class="comment-header">
+														<span class="comment-author">{comment.userName}</span>
+														<span class="comment-date">{formatTime(comment.createdAt)}</span>
+														{#if canDelete(comment.userId)}
+															<button class="inline-delete-btn" onclick={() => deleteComment(proposal, comment.id)}>Slett</button>
+														{/if}
+													</div>
 													<p class="comment-text">{comment.text}</p>
 												</div>
 											{/each}
@@ -371,11 +403,40 @@
 		white-space: pre-wrap;
 	}
 
+	.proposal-meta-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
+	}
+
 	.proposal-meta {
 		font-size: 0.78rem;
 		opacity: 0.5;
-		margin-bottom: 0.75rem;
 	}
+
+	.comment-header {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+		margin-bottom: 0.2rem;
+		flex-wrap: wrap;
+	}
+
+	.inline-delete-btn {
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 0.1rem 0.4rem;
+		background: transparent;
+		border: 1px solid rgba(227, 28, 40, 0.25);
+		color: var(--rod);
+		cursor: pointer;
+		font-family: inherit;
+		opacity: 0.6;
+		transition: all 0.15s;
+		margin-left: auto;
+	}
+	.inline-delete-btn:hover { opacity: 1; background: var(--rod); color: white; border-color: var(--rod); }
 
 	.vote-row {
 		display: flex;
