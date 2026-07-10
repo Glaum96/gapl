@@ -243,6 +243,12 @@ nav {
 	color: var(--krem);
 }
 
+.filter-btn--muted.active {
+	background: rgba(86, 5, 34, 0.15);
+	border-color: rgba(86, 5, 34, 0.35);
+	color: var(--burgunder);
+}
+
 /* FOOTER */
 footer {
 	background: var(--burgunder);
