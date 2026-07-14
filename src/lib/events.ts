@@ -29,17 +29,19 @@ export const EVENTS: Event[] = [
 		facebookUrl: 'https://www.facebook.com/events/4489674294689862/'
 	},
 	{ date: '10. juni 2026', title: 'Sosialt Samvær' },
-	{ date: '24. juni 2026', title: 'Politisk Pub' },
-	{ date: '8. juli 2026', title: 'Sosialdemokratisk Bokklubb' },
-	{ date: '22. juli 2026', title: 'Sosialt Samvær' },
-	{ date: '5. august 2026', title: 'Politisk Pub' },
-	{ date: '19. august 2026', title: 'Sosialdemokratisk Bokklubb' },
-	{ date: '2. september 2026', title: 'Sosialt Samvær' },
-	{ date: '16. september 2026', title: 'Politisk Pub' },
-	{ date: '30. september 2026', title: 'Sosialdemokratisk Bokklubb' },
-	{ date: '14. oktober 2026', title: 'Sosialt Samvær' },
-	{ date: '28. oktober 2026', title: 'Politisk Pub' },
-	{ date: '11. november 2026', title: 'Sosialdemokratisk Bokklubb' }
+	// Sommerpause — oppstart igjen 27. august
+	{ date: '27. august 2026', title: 'Politisk Pub' },
+	{ date: '3. september 2026', title: 'Sosialdemokratisk Bokklubb' },
+	{ date: '10. september 2026', title: 'TBD' },
+	{ date: '17. september 2026', title: 'Sinsen & Carl-Berner-arrangement' },
+	{ date: '24. september 2026', title: 'Politisk Pub' },
+	{ date: '1. oktober 2026', title: 'Sosialdemokratisk Bokklubb' },
+	{ date: '8. oktober 2026', title: 'TBD' },
+	{ date: '15. oktober 2026', title: 'Sinsen & Carl-Berner-arrangement' },
+	{ date: '22. oktober 2026', title: 'Politisk Pub' },
+	{ date: '29. oktober 2026', title: 'Sosialdemokratisk Bokklubb' },
+	{ date: '5. november 2026', title: 'TBD' },
+	{ date: '12. november 2026', title: 'Sinsen & Carl-Berner-arrangement' }
 ];
 
 const MONTH_MAP: Record<string, number> = {

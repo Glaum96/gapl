@@ -4,6 +4,10 @@
 	const next = nextEvent();
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
+
+	const pastEvents = EVENTS.filter(e => parseEventDate(e.date) < today).slice(-1);
+	const upcomingEvents = EVENTS.filter(e => parseEventDate(e.date) >= today).slice(0, 3);
+	const visible = [...pastEvents, ...upcomingEvents];
 </script>
 
 <svelte:head>
@@ -13,7 +17,7 @@
 <div class="container">
 	<div class="info-stripe">
 		<div class="info-item">📍 <span><strong>Shamrock Pub</strong>, Grünerløkka</span></div>
-		<div class="info-item">🕕 <span>Annenhver onsdag, <strong>kl. 18:00</strong></span></div>
+		<div class="info-item">🕕 <span>Hver onsdag, <strong>kl. 18:00</strong></span></div>
 		<div class="info-item">📅 <span>Mai – november 2026</span></div>
 	</div>
 
@@ -49,13 +53,12 @@
 	{/if}
 
 	<h2 class="section-heading">Aktivitetsplan</h2>
-	<p class="section-sub">Tre aktiviteter som roterer annenhver onsdag</p>
+	<p class="section-sub">Fire aktiviteter på rullering hver onsdag</p>
 
 	<div class="events-grid">
-		{#each EVENTS as event, i}
+		{#each visible as event}
 			{@const past = parseEventDate(event.date) < today}
 			<div class="event-card" class:past>
-				<div class="card-label">Aktivitet {i + 1}</div>
 				<div class="card-title">{event.title}</div>
 				<div class="card-detail">Onsdag {event.date}</div>
 				<div class="card-detail">Kl. 18:00 · Shamrock Pub</div>
