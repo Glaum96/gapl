@@ -1,11 +1,16 @@
-import { fetchCases, type Case } from './einnsyn.js';
-import { getCasesCollection, getUsersCollection } from './db.js';
+import { fetchCases, fetchMeetings, type Case, type Meeting } from './einnsyn.js';
+import { getCasesCollection, getMeetingsCollection, getUsersCollection } from './db.js';
 import { sendCategoryAlerts } from './mailer.js';
 import type { ObjectId } from 'mongodb';
 
 const TTL_MS = 24 * 60 * 60 * 1000;
 
 interface CaseDoc extends Case {
+	_id?: ObjectId;
+	cachedAt: number;
+}
+
+interface MeetingDoc extends Meeting {
 	_id?: ObjectId;
 	cachedAt: number;
 }
@@ -51,4 +56,25 @@ export async function refreshCases(): Promise<Case[]> {
 	}
 
 	return cases;
+}
+
+export async function getMeetings(): Promise<Meeting[]> {
+	const col = await getMeetingsCollection();
+	const first = await col.findOne<MeetingDoc>({});
+	if (first && Date.now() - first.cachedAt < TTL_MS) {
+		const docs = await col.find<MeetingDoc>({}).toArray();
+		return docs.map(({ cachedAt: _, _id: __, ...m }) => m as Meeting);
+	}
+	return refreshMeetings();
+}
+
+export async function refreshMeetings(): Promise<Meeting[]> {
+	const col = await getMeetingsCollection();
+	const meetings = await fetchMeetings();
+	const cachedAt = Date.now();
+	await col.deleteMany({});
+	if (meetings.length) {
+		await col.insertMany(meetings.map((m) => ({ ...m, cachedAt })));
+	}
+	return meetings;
 }

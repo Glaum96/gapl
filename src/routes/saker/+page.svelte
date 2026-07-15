@@ -85,6 +85,13 @@
 		if (!iso) return '';
 		return new Date(iso).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' });
 	}
+
+	function formatMeetingDate(iso: string | null): string {
+		if (!iso) return '';
+		return new Date(iso).toLocaleDateString('nb-NO', {
+			weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+		});
+	}
 </script>
 
 <svelte:head>
@@ -156,6 +163,19 @@
 			</span>
 		</div>
 	</div>
+
+	{#if data.upcomingMeetings.length > 0}
+		<div class="meetings-bar">
+			<span class="meetings-bar-label">Kommende BU-møter</span>
+			<div class="meetings-bar-list">
+				{#each data.upcomingMeetings as m}
+					<a href="/saker/mote/{encodeURIComponent(m.einnsynId)}" class="meeting-chip">
+						{formatMeetingDate(m.meetingDate)}
+					</a>
+				{/each}
+			</div>
+		</div>
+	{/if}
 
 	{#if filtered.length === 0}
 		<p class="empty-state">Ingen saker matcher valgte filtre.</p>
@@ -291,6 +311,49 @@
 	}
 
 	.interest-chip:hover { opacity: 1; }
+
+	.meetings-bar {
+		display: flex;
+		align-items: baseline;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding: 0.75rem 1rem;
+		background: rgba(86, 5, 34, 0.04);
+		border: 1px solid rgba(86, 5, 34, 0.12);
+		margin-bottom: 1.5rem;
+	}
+
+	.meetings-bar-label {
+		font-size: 0.72rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--burgunder);
+		opacity: 0.5;
+		white-space: nowrap;
+	}
+
+	.meetings-bar-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.meeting-chip {
+		font-size: 0.82rem;
+		font-weight: 600;
+		color: var(--burgunder);
+		text-decoration: none;
+		padding: 0.2rem 0.6rem;
+		border: 1px solid rgba(86, 5, 34, 0.25);
+		transition: all 0.15s;
+	}
+
+	.meeting-chip:hover {
+		background: var(--burgunder);
+		color: var(--krem);
+		border-color: var(--burgunder);
+	}
 
 	.empty-state {
 		font-size: 1rem;

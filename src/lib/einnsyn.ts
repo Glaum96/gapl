@@ -111,6 +111,33 @@ async function fetchPage(cursors: string[] = []): Promise<{ items: RawItem[]; ne
 	return { items: data.items ?? [], nextCursors };
 }
 
+export interface Meeting {
+	einnsynId: string;
+	title: string;
+	meetingDate: string | null;
+	location: string | null;
+	moetesakIds: string[];
+}
+
+export async function fetchMeetings(): Promise<Meeting[]> {
+	const params = new URLSearchParams();
+	params.append('query', SEARCH_QUERY);
+	params.append('entity', 'Moetemappe');
+	params.append('limit', '10');
+
+	const resp = await fetch(`${EINNSYN_API}/search?${params}`);
+	if (!resp.ok) return [];
+	const data = await resp.json();
+
+	return (data.items ?? []).map((item: Record<string, unknown>) => ({
+		einnsynId: String(item.id ?? ''),
+		title: String(item.offentligTittel ?? 'Uten tittel'),
+		meetingDate: item.moetedato ? String(item.moetedato) : null,
+		location: item.moetested ? String(item.moetested) : null,
+		moetesakIds: Array.isArray(item.moetesak) ? item.moetesak.map(String) : []
+	}));
+}
+
 export async function fetchCases(maxPages = 5): Promise<Case[]> {
 	const allRaw: RawItem[] = [];
 	let cursors: string[] = [];

@@ -46,3 +46,7 @@ export async function getVotesCollection(): Promise<Collection> {
 export async function getCommentsCollection(): Promise<Collection> {
 	return (await db()).collection('comments');
 }
+
+export async function getMeetingsCollection(): Promise<Collection> {
+	return (await db()).collection('meetings');
+}
