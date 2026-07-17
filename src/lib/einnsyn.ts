@@ -24,55 +24,34 @@ function detectDocType(title: string, jpType: string, entity: string): string {
 	return 'annet';
 }
 
-async function fetchSaksmappeExternalIds(ids: string[]): Promise<Map<string, string>> {
-	const result = new Map<string, string>();
-	await Promise.all(
-		ids.map(async (id) => {
-			try {
-				const resp = await fetch(`${EINNSYN_API}/saksmappe/${id}`);
-				if (resp.ok) {
-					const data = await resp.json();
-					if (data.externalId) result.set(id, data.externalId);
-				}
-			} catch {
-				// ignore individual failures
-			}
-		})
-	);
-	return result;
-}
-
-function buildEinnsynUrl(jpExternalId: string, smExternalId: string): string {
-	return `${EINNSYN_WEB}/saksmappe?id=${encodeURIComponent(smExternalId)}&jid=${encodeURIComponent(jpExternalId)}`;
-}
 
 interface RawItem {
 	id: string;
-	externalId?: string;
 	entity?: string;
 	offentligTittel?: string;
 	journalposttype?: string;
 	publisertDato?: string;
-	saksmappe?: string;
+	slug?: string;
+}
+
+function buildEinnsynUrlFromSlug(entity: string, slug: string): string {
+	if (entity === 'Moetesak') return `${EINNSYN_WEB}/moetesak/${slug}`;
+	if (entity === 'Moetemappe') return `${EINNSYN_WEB}/moetemappe/${slug}`;
+	return `${EINNSYN_WEB}/journalpost/${slug}`;
 }
 
 async function normalizeItems(items: RawItem[]): Promise<Case[]> {
-	const saksmappeIds = [...new Set(items.map((i) => i.saksmappe).filter(Boolean))] as string[];
-	const smExternalIds = await fetchSaksmappeExternalIds(saksmappeIds);
-
 	return items.map((item) => {
 		const einnsynId = item.id ?? '';
 		const entity = item.entity ?? 'Journalpost';
 		const title = item.offentligTittel ?? 'Uten tittel';
 		const docType = detectDocType(title, item.journalposttype ?? '', entity);
 		const publishedAt = item.publisertDato ?? null;
-		const jpExternalId = item.externalId ?? '';
-		const smExternalId = item.saksmappe ? (smExternalIds.get(item.saksmappe) ?? '') : '';
+		const slug = item.slug ?? '';
 
-		const einnsynUrl =
-			jpExternalId && smExternalId
-				? buildEinnsynUrl(jpExternalId, smExternalId)
-				: `${EINNSYN_WEB}/`;
+		const einnsynUrl = slug
+			? buildEinnsynUrlFromSlug(entity, slug)
+			: `${EINNSYN_WEB}/`;
 
 		return {
 			einnsynId,
