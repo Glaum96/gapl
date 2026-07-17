@@ -98,6 +98,33 @@ export interface Meeting {
 	moetesakIds: string[];
 }
 
+export async function fetchCaseById(id: string): Promise<Case | null> {
+	let endpoint: string;
+	if (id.startsWith('ms_')) endpoint = `${EINNSYN_API}/moetesak/${id}`;
+	else if (id.startsWith('mm_')) endpoint = `${EINNSYN_API}/moetemappe/${id}`;
+	else endpoint = `${EINNSYN_API}/journalpost/${id}`;
+
+	try {
+		const resp = await fetch(endpoint);
+		if (!resp.ok) return null;
+		const item = await resp.json();
+		const entity = item.entity ?? 'Journalpost';
+		const title = item.offentligTittel ?? 'Uten tittel';
+		const slug = item.slug ?? '';
+		return {
+			einnsynId: id,
+			title,
+			entityType: entity,
+			documentType: detectDocType(title, item.journalposttype ?? '', entity),
+			publishedAt: item.publisertDato ?? null,
+			einnsynUrl: slug ? buildEinnsynUrlFromSlug(entity, slug) : `${EINNSYN_WEB}/`,
+			categories: categorize(title)
+		};
+	} catch {
+		return null;
+	}
+}
+
 export async function fetchMeetings(): Promise<Meeting[]> {
 	const params = new URLSearchParams();
 	params.append('query', SEARCH_QUERY);
